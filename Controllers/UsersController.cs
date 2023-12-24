@@ -11,38 +11,82 @@ namespace userMicroservice.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService userService;
-
-        // GET: api/<UsersController>private readonly IUserService userService;
-        public UsersController(IUserService _userService)
+        private readonly IUserService _userService;
+        public UsersController(IUserService userService)
         {
-            userService = _userService;
+            _userService = userService;
         }
         [HttpGet]
-        public IEnumerable<User> UserList()
+        public async Task<ActionResult> UserList()
         {
-            var userList = userService.GetUserList();
-            return userList;
+            try
+            {
+                var users = await _userService.GetUserList();
+
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                });
+            }
+
         }
         [HttpGet("{id}")]
-        public User GetUserById(int id)
+        public async Task<ActionResult> GetUserByIdAsync(int userId)
         {
-            return userService.GetUserById(id);
+            var user = await _userService.GetUserByIdAsync(userId);
+            return Ok(user);
         }
         [HttpPost]
-        public User AddUser(User user)
+        public async Task<ActionResult> CreateUserAsync(User user)
         {
-            return userService.AddUser(user);
+            try
+            {
+                var userAdded = await _userService.CreateUserAsync(user);
+                return Ok(userAdded);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                });
+            }
         }
         [HttpPut]
-        public User UpdateUser(User user)
+        public async Task<ActionResult> UpdateUserAsync(User user, int userId)
         {
-            return userService.UpdateUser(user);
+            try
+            {
+                var userUpdated = await _userService.UpdateUserAsync(user, userId);
+                return Ok(userUpdated);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                });
+            }
         }
         [HttpDelete("{id}")]
-        public bool DeleteUser(int id)
+        public async Task<ActionResult> DeleteUserAsync(int userId)
         {
-            return userService.DeleteUser(id);
+            try
+            {
+                var userDeleted = await _userService.DeleteUserAsync(userId);
+                return Ok(userDeleted);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new
+                {
+                    Error = ex.Message,
+                });
+            }
         }
     }
 }

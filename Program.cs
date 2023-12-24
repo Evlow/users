@@ -1,8 +1,5 @@
-using userMicroservice.Data;
 using userMicroservice.IoC.IoCApplication;
 using userMicroservice.IoC.IoCTest;
-using userMicroservice.Services;
-using userMicroservice.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = builder.Configuration;
@@ -11,15 +8,20 @@ IConfiguration configuration = builder.Configuration;
 if (builder.Environment.IsEnvironment("Test"))
 {
     builder.Services.ConfigureDBContextTest();
+    builder.Services.ConfigureInjectionDependencyRepositoryTest();
+    builder.Services.ConfigureInjectionDependencyServiceTest();
 }
 else
 {
     builder.Services.ConfigureDBContext(configuration);
+    builder.Services.ConfigureInjectionDependencyRepository();
+    builder.Services.ConfigureInjectionDependencyService();
 }
 
 // Add services to the container.
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddDbContext<DbContextClass>();
+//builder.Services.AddScoped<IUserService, UserService>();
+//builder.Services.AddDbContext<DbContextClass>();
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
