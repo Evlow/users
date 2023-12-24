@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Test
-      run: dotnet test features/unitTest/Tests/unitTest
+      run: dotnet test features/unitTest/Tests/unitTest/UserUnitTest.cs
         /p:CollectCoverage=true /p:CoverletOutput=TestResults/
         /p:CoverletOutputFormat=lcov
 
