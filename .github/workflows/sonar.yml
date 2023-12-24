@@ -42,6 +42,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_USERS }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"products_productsmicroservices" /o:"products" /d:sonar.token="${{ secrets.SONAR_TOKEN_USERS }}" /d:sonar.host.url="https://sonarcloud.io"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"usersmicroservice_users" /o:"usersmicroservice" /d:sonar.token="${{ secrets.SONAR_TOKEN_USERS }}" /d:sonar.host.url="https://sonarcloud.io"          
           dotnet build /p:Configuration=Release
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN_USERS }}"
