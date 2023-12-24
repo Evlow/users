@@ -1,4 +1,5 @@
 ﻿using userMicroservice.Data;
+using userMicroservice.Data.Repository;
 using userMicroservice.Model;
 using userMicroservice.Services.Interface;
 
@@ -6,37 +7,48 @@ namespace userMicroservice.Services
 {
     public class UserService : IUserService
     {
-        private readonly DbContextClass _dbContext;
-        public UserService(DbContextClass dbContext)
+        private readonly UserRepository _userRepository;
+        public UserService(UserRepository userRepository)
         {
-            _dbContext = dbContext;
+            _userRepository = userRepository;
         }
-        public User AddUser(User product)
+        public async Task<List<User>> GetUserList()
         {
-            var result = _dbContext.Users.Add(product);
-            _dbContext.SaveChanges();
-            return result.Entity;
+            return await _userRepository.GetUsersAsync().ConfigureAwait(false);
         }
-        public bool DeleteUser(int Id)
+        public async Task<User> GetUserByIdAsync(int userId)
         {
-            var filteredData = _dbContext.Users.Where(x => x.UserId == Id).FirstOrDefault();
-            var result = _dbContext.Remove(filteredData);
-            _dbContext.SaveChanges();
-            return result != null ? true : false;
+            return await _userRepository.GetUserByIdAsync(userId);
         }
-        public User GetUserById(int id)
+        public async Task<User> CreateUserAsync(User user)
         {
-            return _dbContext.Users.Where(x => x.UserId == id).FirstOrDefault();
+            var userAdded = await _userRepository.CreateUserAsync(user);
+
+            return userAdded;
         }
-        public IEnumerable<User> GetUserList()
+        public async Task<User> UpdateUserAsync(User user, int userId)
         {
-            return _dbContext.Users.ToList();
+            var userGet = await _userRepository.GetUserByIdAsync(userId).ConfigureAwait(false);
+            if (userGet == null)
+                throw new Exception($"L'utilisateur avec cet identifiant {userId} n'existe pas");
+            userGet.UserName = user.UserName;
+            userGet.Address = user.Address;
+
+            await _userRepository.UpdateUserAsync(userGet).ConfigureAwait(false);
+
+            return userGet;
         }
-        public User UpdateUser(User product)
+
+        public async Task<User> DeleteUserAsync(int userId)
         {
-            var result = _dbContext.Users.Update(product);
-            _dbContext.SaveChanges();
-            return result.Entity;
+            var userGet = await _userRepository.GetUserByIdAsync(userId).ConfigureAwait(false);
+
+            if (userGet == null)
+                throw new Exception($"L'utilisateur avec cet identifiant {userId} n'existe pas");
+
+            var userDeleted = await _userRepository.DeleteUserAsync(userGet).ConfigureAwait(false);
+
+            return userDeleted;
         }
     }
 }
