@@ -25,7 +25,7 @@ jobs:
       run: dotnet build --configuration Release
 
     - name: Test
-      run: dotnet test features/unitTest.Tests/features/unitTest.Tests.csproj
+      run: dotnet test features/unitTest/Tests/unitTest
         /p:CollectCoverage=true /p:CoverletOutput=TestResults/
         /p:CoverletOutputFormat=lcov
 
@@ -33,4 +33,4 @@ jobs:
       uses: coverallsapp/github-action@main
       with: 
         github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: 
+        path-to-lcov: features/unitTest/Tests/TestResults/coverage.info
