@@ -17,7 +17,7 @@ namespace userMicroservice.Controllers
             _userService = userService;
         }
         [HttpGet]
-        public async Task<ActionResult> UserList()
+        public async Task<ActionResult> GetAllUser()
         {
             try
             {
