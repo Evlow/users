@@ -34,8 +34,8 @@ namespace userMicroservice.Tests.unitTest
             var user = new User()
             {
                 UserId = 3,
-                UserName = "Julie",
-                Address = "12 rue Tolstoi 69100 Villeurbanne"
+                UserName = "Mathilde",
+                Address = "27 rue des loups, 69300 CALUIRE ET CUIRE"
             };
 
             // Act
@@ -45,7 +45,7 @@ namespace userMicroservice.Tests.unitTest
             Assert.Multiple(() =>
             {
                 Assert.That(userToAdd, Is.Not.Null);
-                Assert.That(user.UserName, Is.EqualTo("Julie"));
+                Assert.That(user.UserName, Is.EqualTo("Mathilde"));
             });
         }
     }
